@@ -48,6 +48,10 @@ const fetchData = async () => {
         }
     }
 
+    const submitText=()=>{
+      setQuery("")
+    }
+
     const ToDoCard = ({item, index}) => {
         return(
             <View style={{flexDirection:'row'}}>
@@ -62,9 +66,12 @@ const fetchData = async () => {
     return(
         <View>
             <Text>HomePage</Text>
-            <TextInput placeholder="Enter Todo" onChangeText={(text) => {setQuery(text)}}/>
-            <Button title="+" onPress={() => {setTodoList([...todoList, query])
-                storeData(todoList)
+            <TextInput placeholder="Enter Todo" value={query} onChangeText={(text) => {setQuery(text)}}/>
+            <Button title="+" onPress={() => {
+              if(query)
+              setTodoList([...todoList, query])
+              storeData(todoList)
+              setQuery("")
             }}/>
             
             <FlatList
