@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { View, SafeAreaView, Text, StyleSheet, Button,TextInput, FlatList, TouchableOpacity } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 export default Homepage = () =>{
 
     const [todoList, setTodoList] = useState([])
     const [query, setQuery] = useState()
-
     useEffect(() => {
   
   fetchData();
@@ -14,6 +15,7 @@ export default Homepage = () =>{
 const fetchData = async () => {
     const data = await getData();
     if (data) setTodoList(data);
+    console.log("aaaaaaaaaa")
   };
 
     const storeData = async (value) => {
@@ -47,18 +49,39 @@ const fetchData = async () => {
             
         }
     }
-
-    const submitText=()=>{
-      setQuery("")
+        const editData = (index, query) =>{
+        try {
+            const array = todoList
+            if(index!=-1){
+                array[index] = query
+                setTodoList(array)
+                storeData(array)
+                fetchData()
+            }
+        } catch (error) {
+            
+        }
     }
 
     const ToDoCard = ({item, index}) => {
+        const [localValue, setLocalValue] = useState(item);
+        const [isEditing, setIsEditing]= useState(false)
+
         return(
             <View style={{flexDirection:'row'}}>
-                <Text>{item} - {index}</Text>
+              <TextInput value={localValue} onChangeText={(item)=> {setLocalValue(item);setIsEditing(true)}}/>
+
                 <TouchableOpacity onPress={()=>removeData(index)}>
                 <Text style={{color:'red', fontSize:30, alignContent:'center',}}>-</Text>
                 </TouchableOpacity>
+
+                {isEditing &&
+                (
+                <TouchableOpacity onPress={()=>{editData(index,localValue); }}>
+                <Text style={{color: 'green', fontSize:20, alignContent:'center',}}>Edit</Text>
+                </TouchableOpacity>
+                )}
+                
             </View>
         )
     }
