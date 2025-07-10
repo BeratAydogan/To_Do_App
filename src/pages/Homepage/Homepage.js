@@ -36,25 +36,26 @@ const removeData = (id) => {
 const editData = (id, newText) => {
   const array = [...todoList];
   const index = array.findIndex(item => String(item.id) === String(id));
-  
+  console.log("index" + id +"text"+ newText)
   if (index !== -1) {
     array[index].text = newText;
     setTodoList(array);
     storeData(array);
   } else {
-    console.warn('editData: id bulunamadı ->', id);
   }
+    console.log(Date.now())
+
 };
 
 
-  const toggleCheck = (index, value) => {
-    const array = [...todoList];
-    if (index !== -1) {
-      array[index].ischecked = value;
-      setTodoList(array);
-      storeData(array);
-    }
-  };
+ const toggleCheck = (id, value) => {
+  const array = todoList.map(item => {
+    if (item.id === id) return { ...item, ischecked: value };
+    return item;
+  });
+  setTodoList(array);
+  storeData(array);
+};
 
   return (
     <View style={{ padding: 16 }}>
@@ -68,16 +69,16 @@ const editData = (id, newText) => {
       <Button title="+" onPress={() => addItem(query)} />
 <FlatList
   data={todoList}
-  keyExtractor={(_, index) => index.toString()}
+  keyExtractor={(item) => item.id.toString()}
   renderItem={({ item, index }) => (
     <ToDoCard
-    index={index}
-    item={item}
-      onRemove={() => removeData(index)}
-      onEdit={() => editData(index)}
-      onToggle={() => toggleCheck(index)}
-    />
-  )}
+      index={index}
+      item={item}
+      onRemove={() => removeData(item.id)}
+      onEdit={(text) => editData(item.id, text)}
+onToggle={(newValue) => toggleCheck(item.id, newValue)}
+    />
+  )}
 />
 
     
