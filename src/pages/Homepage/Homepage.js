@@ -1,13 +1,15 @@
 // src/pages/Homepage.js
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, Modal } from 'react-native';
 import { storeData, getData } from '../../services/DB';
 import ToDoCard from '../../components/ToDoCard/ToDoCard';
+import { AddModal } from '../../components/Modal/addModal';
 
 const Homepage = () => {
   const [todoList, setTodoList] = useState([]);
   const [query, setQuery] = useState('');
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     fetchData();
@@ -18,71 +20,74 @@ const Homepage = () => {
     if (data) setTodoList(data);
   };
 
-const addItem = (query) => {
-  if (!query) return;
-  const newItem = { id: Date.now(), text: query, ischecked: false };
-  const updatedList = [...todoList, newItem];
-  setTodoList(updatedList);
-  storeData(updatedList);
-  setQuery('');
-};
-
-const removeData = (id) => {
-  const newToDoList = todoList.filter(item => String(item.id) !== String(id)); // ID'ye göre filtrele
-  setTodoList(newToDoList);
-  storeData(newToDoList);
-};
-
-const editData = (id, newText) => {
-  const array = [...todoList];
-  const index = array.findIndex(item => String(item.id) === String(id));
-  console.log("index" + id +"text"+ newText)
-  if (index !== -1) {
-    array[index].text = newText;
-    setTodoList(array);
-    storeData(array);
-  } else {
+  const toggleModalVisible=()=>{
+    setVisible(!visible)
   }
+
+  const removeData = (id) => {
+    const newToDoList = todoList.filter(item => String(item.id) !== String(id)); // ID'ye göre filtrele
+    setTodoList(newToDoList);
+    storeData(newToDoList);
+  };
+
+  const editData = (id, newText) => {
+    const array = [...todoList];
+    const index = array.findIndex(item => String(item.id) === String(id));
+    console.log("index" + id + "text" + newText)
+    if (index !== -1) {
+      array[index].text = newText;
+      setTodoList(array);
+      storeData(array);
+    } else {
+    }
     console.log(Date.now())
 
-};
+  };
 
 
- const toggleCheck = (id, value) => {
-  const array = todoList.map(item => {
-    if (item.id === id) return { ...item, ischecked: value };
-    return item;
-  });
-  setTodoList(array);
-  storeData(array);
-};
+  const toggleCheck = (id, value) => {
+    const array = todoList.map(item => {
+      if (item.id === id) return { ...item, ischecked: value };
+      return item;
+    });
+    setTodoList(array);
+    storeData(array);
+  };
 
   return (
     <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 24 }}>HomePage</Text>
-      <TextInput
-        placeholder="Enter Todo"
-        value={query}
-        onChangeText={setQuery}
-        style={{ borderWidth: 1, marginVertical: 10, padding: 8 }}
-      />
-      <Button title="+" onPress={() => addItem(query)} />
-<FlatList
-  data={todoList}
-  keyExtractor={(item) => item.id.toString()}
-  renderItem={({ item, index }) => (
-    <ToDoCard
-      index={index}
-      item={item}
-      onRemove={() => removeData(item.id)}
-      onEdit={(text) => editData(item.id, text)}
-onToggle={(newValue) => toggleCheck(item.id, newValue)}
-    />
-  )}
-/>
 
-    
+      <Button title="+" onPress={() => setVisible(true)} />
+      <FlatList
+        data={todoList}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item, index }) => (
+          <ToDoCard
+            index={index}
+            item={item}
+            onRemove={() => removeData(item.id)}
+            onEdit={(text) => editData(item.id, text)}
+            onToggle={(newValue) => toggleCheck(item.id, newValue)}
+          />
+        )}
+      />
+
+<Modal
+  visible={visible}
+  transparent={true}
+  animationType="slide"
+  onRequestClose={() => setVisible(false)}
+>
+  <AddModal
+    query={query}
+    setQuery={setQuery}
+    todoList={todoList}
+    setTodoList={setTodoList}
+    setVisible={ toggleModalVisible} 
+  />
+</Modal>
     </View>
+   
   );
 };
 
