@@ -2,14 +2,14 @@ import React from 'react';
 import { SafeAreaView, View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { storeData } from '../../services/DB';
 
-export const AddModal = ({ query, setQuery, todoList, setTodoList, setVisible }) => {
+export const AddModal = ({ query, setQuery, todoList, setTodoList, setVisible,anahtar }) => {
 
   const addItem = () => {
     if (!query) return;
     const newItem = { id: Date.now(), text: query, ischecked: false };
     const updatedList = [...todoList, newItem];
     setTodoList(updatedList);
-    storeData(updatedList);
+    storeData(anahtar, updatedList);
     setQuery('');
     setVisible(); // ekledikten sonra modal kapatılsın
   };

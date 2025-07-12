@@ -6,7 +6,9 @@ import { storeData, getData } from '../../services/DB';
 import ToDoCard from '../../components/ToDoCard/ToDoCard';
 import { AddModal } from '../../components/Modal/addModal';
 
-const Homepage = () => {
+const ToDoListPage = ({route}) => {
+    const { anahtar } = route.params;
+
   const [todoList, setTodoList] = useState([]);
   const [query, setQuery] = useState('');
   const [visible, setVisible] = useState(false)
@@ -16,7 +18,7 @@ const Homepage = () => {
   }, []);
 
   const fetchData = async () => {
-    const data = await getData();
+    const data = await getData(anahtar);
     if (data) setTodoList(data);
   };
 
@@ -27,7 +29,7 @@ const Homepage = () => {
   const removeData = (id) => {
     const newToDoList = todoList.filter(item => String(item.id) !== String(id)); // ID'ye göre filtrele
     setTodoList(newToDoList);
-    storeData(newToDoList);
+    storeData(anahtar ,newToDoList);
   };
 
   const editData = (id, newText) => {
@@ -37,7 +39,7 @@ const Homepage = () => {
     if (index !== -1) {
       array[index].text = newText;
       setTodoList(array);
-      storeData(array);
+      storeData(anahtar, array);
     } else {
     }
     console.log(Date.now())
@@ -51,12 +53,12 @@ const Homepage = () => {
       return item;
     });
     setTodoList(array);
-    storeData(array);
+    storeData(anahtar, array);
   };
 
   return (
     <View style={{ padding: 16 }}>
-
+<Text>ToDo Sayfası</Text>
       <Button title="+" onPress={() => setVisible(true)} />
       <FlatList
         data={todoList}
@@ -83,7 +85,8 @@ const Homepage = () => {
     setQuery={setQuery}
     todoList={todoList}
     setTodoList={setTodoList}
-    setVisible={ toggleModalVisible} 
+    setVisible={ toggleModalVisible}
+    anahtar={anahtar}
   />
 </Modal>
     </View>
@@ -91,4 +94,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default ToDoListPage;
