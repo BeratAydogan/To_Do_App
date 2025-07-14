@@ -5,7 +5,7 @@ import { View, Text, TextInput, Button, FlatList, Modal } from 'react-native';
 import { storeData, getData } from '../../services/Db';
 import ToDoCard from '../../components/Card/ToDoCard';
 import { AddModal } from '../../components/Modal/addModal';
-
+import { ButtonPlus } from '../../components/Button/ButtonPlus';
 const ToDoListPage = ({route}) => {
 const anahtar = route.params?.anahtar ?? 'defaultDeğer'; 
 
@@ -59,7 +59,7 @@ const anahtar = route.params?.anahtar ?? 'defaultDeğer';
   return (
     <View style={{ padding: 16 }}>
 <Text>ToDo Sayfası</Text>
-      <Button title="+" onPress={() => setVisible(true)} />
+    <ButtonPlus text={'+'} func={toggleModalVisible}/>
       <FlatList
         data={todoList}
         keyExtractor={(item) => item.id.toString()}
@@ -89,6 +89,7 @@ const anahtar = route.params?.anahtar ?? 'defaultDeğer';
     anahtar={anahtar}
   />
 </Modal>
+
     </View>
    
   );

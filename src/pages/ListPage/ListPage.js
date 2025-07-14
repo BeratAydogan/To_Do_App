@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, FlatList, Modal, TouchableOpacity } from
 import { storeData, getData } from '../../services/Db';
 import ToDoCard from '../../components/Card/ToDoCard';
 import { AddModal } from '../../components/Modal/addModal';
-
+import { ButtonPlus } from '../../components/Button/ButtonPlus';
 const ListPage =({navigation})=>{
   const [list, setList] = useState([]);
   const [query, setQuery] = useState('');
@@ -55,7 +55,6 @@ const ListPage =({navigation})=>{
   return (
     <View style={{ padding: 16 }}>
 <Text>LİSTE SAYFASI</Text>
-      <Button title="+" onPress={() => setVisible(true)} />
       <FlatList
         data={list}
         keyExtractor={(item) => item.id.toString()}
@@ -88,6 +87,8 @@ const ListPage =({navigation})=>{
     anahtar={'lists'}
   />
 </Modal>
+    <ButtonPlus text={'+'} func={toggleModalVisible}/>
+
     </View>
    
   );

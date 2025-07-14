@@ -22,8 +22,7 @@ options={{title: 'Liste Sayfası'}}>
         <Stack.Screen
 name='ToDoPage'
 component={ToDoPage}
-options={{title: 'ToDo Sayfası'}}>
-
+options={({ route }) => ({ title: route.params.text })}>
 </Stack.Screen>
 
 
