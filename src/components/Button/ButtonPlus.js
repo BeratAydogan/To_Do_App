@@ -14,7 +14,7 @@ export const ButtonPlus = ({ text, func }) => {
 const styles = StyleSheet.create({
     btn: {
         position: 'absolute',
-        bottom: 20,
+        bottom: -100,
         right: 20,
         width: 60,
         height: 60,

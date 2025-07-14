@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, FlatList, Modal, TouchableOpacity } from 'react-native';
 import { storeData, getData } from '../../services/Db';
-import ToDoCard from '../../components/Card/ToDoCard';
+import ListCard from '../../components/Card/ListCard';
 import { AddModal } from '../../components/Modal/addModal';
 import { ButtonPlus } from '../../components/Button/ButtonPlus';
 const ListPage =({navigation})=>{
@@ -60,7 +60,7 @@ const ListPage =({navigation})=>{
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item, index }) => (
 <TouchableOpacity onPress={() => navigation.navigate("ToDoPage", { anahtar: item.text })}>
-                  <ToDoCard
+                  <ListCard
             index={index}
             item={item}
             onRemove={() => removeData(item.id)}
